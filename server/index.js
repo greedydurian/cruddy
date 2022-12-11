@@ -49,9 +49,23 @@ app.post('/api/createcard', (req, res) => {
 
     const email = req.body.email;
     const name = req.body.name;
-    
+    db.query("INSERT IGNORE INTO card_db(email, name) VALUES ( ? , ?)", [email, name], (error, result) => {
+        console.log("error", error);
+        console.log("result", result)}
+        );
+} );
 
-    db.query("INSERT INTO card_db(email, name) VALUES ( ? , ?)", [email, name], (error, result) => {
+app.post('/api/inputCardDetails', (req, res) => {
+
+    const email = req.body.email;
+    const name = req.body.name;
+    const cardName = req.body.cardName;
+    const company = req.body.company;
+    const year = req.body.year;
+    const type = req.body.type;
+    const edition = req.body.edition;
+
+    db.query("INSERT INTO card_details_db(email, name, cardName, company, year, type, edition) VALUES ( ? , ?, ? , ?, (STR_TO_DATE(?, '%Y')) , ?,?)", [email, name,cardName, company, year, type, edition], (error, result) => {
         console.log("error", error);
         console.log("result", result)}
         );

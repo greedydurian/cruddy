@@ -6,9 +6,13 @@ import {Cardinfo} from './Cardinfo';
 
 const First = () => {
   return (
-    <div>
-        <Link to='/UserDetails' className='border-2 border-rose-600'>User details</Link>
-        <Link to='/Cardinfo' className='border-2 border-rose-600'>Card details</Link>
+    <div className="bg-white grid h-56 flex content-center justify-center items-center gap-4">
+        <Link to='/UserDetails' className='bg-gray-300 rounded'>
+          <button className="bg-black text-white px-4 py-2 rounded-lg">User Details</button>
+        </Link>
+        <Link to='/Cardinfo' className='bg-gray-300 rounded'>
+          <button className="bg-black text-white px-4 py-2 rounded-lg">Card Details</button>
+        </Link>
     </div>
   );
 };
