@@ -71,6 +71,15 @@ app.post('/api/inputCardDetails', (req, res) => {
         );
 } );
 
+app.get('/api/allCardDetails', (req, res) => {
+    db.query("SELECT email, name, type FROM card_details_db group by email", (error, result) => {
+        console.log("error", error);
+        console.log("result",result);
+        res.send(result)
+    });
+   
+});
+
 app.listen(5000, ()=>{
     console.log('server is running on port 5000')
 })

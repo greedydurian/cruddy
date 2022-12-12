@@ -1,7 +1,8 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Button } from "@material-tailwind/react";
 import Axios from "axios";
 import QRCode from "qrcode.react";
+import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 
 
@@ -19,7 +20,32 @@ const Cardinfo = () => {
   const [type, setType] =useState([]);
   const [edition, setEdition]= useState([])
 
-  
+  const [open, setOpen] =useState(false)
+
+
+  const handleSubmit = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event) => {
+    setOpen(false);
+    event.preventDefault();
+  };
+
+
+  const downloadQRCode = () => {
+    const qrCodeURL = document.getElementById('qrCodename')
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
+    console.log(qrCodeURL)
+    let aEl = document.createElement("a");
+    aEl.href = qrCodeURL;
+    aEl.download = "QR_Code.png";
+    document.body.appendChild(aEl);
+    aEl.click();
+    document.body.removeChild(aEl);
+  }
+
 //on click generate these and send to db
   const getCard = async () => {
   return Axios.post("http://localhost:5000/api/createcard" , {
@@ -49,22 +75,25 @@ const Cardinfo = () => {
       edition:edition, 
       }).then(() => {
           console.log('success');
+          setOpen(true);
       }).catch((error) => {
           // handle the error here
       });
     };
 
+
   return (
     
-    <div className="bg-white text-white p-4">
-       <h1 className="text-2xl font-bold">Cardinfo</h1>
-      <Button className='bg-white text-black border-2 border-rose-600' onClick={getDetails}>View Submitted details</Button>
+    <div className="bg-gray-200 text-white p-4">
+      
+      <Button className='bg-black text-white px-4 py-2 rounded-lg ml-4' onClick={getDetails}>View Submitted details</Button>
       <div className="mt-4">
-
+      <h1 className="text-2xl text-black font-bold">Cardinfo</h1>
         {userDetails.length > 0 && userDetails.map((value, key)=>{
         return (
-        
+          
           <div className="flex mt-2 w-full" key={key}>
+             
             <br></br>
             <input className="mr-2"
                     type="radio"
@@ -92,15 +121,18 @@ const Cardinfo = () => {
             <button className="bg-black text-white px-4 py-2 rounded-lg ml-4" onClick={() => setQrCodeData(name)}>Generate QR code</button>
          
             {qrCodeData && (
-            <QRCode value={qrCodeData} className="mt-4"/>)}
-          
+            <QRCode id='qrCodename' value={qrCodeData} className="mt-4"/>)}
+            <button className="bg-black text-white px-4 py-2 rounded-lg" onClick={downloadQRCode}>Download QR Code</button>
+            
+            
         
               {email && <p className="mt-4 text-black font-semibold">Selected email: {email}</p>}
               {name && <p className="mt-4 text-black font-semibold">Selected name: {name}</p>}
 
 
-              {showForm && (
-              <form className="mt-4 text-black font-semibold"> 
+            {showForm && (
+              
+              <form className="mt-4 text-black font-semibold" onSubmit={handleSubmit}> 
               <h1 className='font-weight-bold mb-4'>Form</h1>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Card Name
@@ -120,7 +152,17 @@ const Cardinfo = () => {
                 </label>
                 </div>
                 <button className="bg-black text-white px-4 py-2 rounded-lg ml-4" onClick={getallCardDetails}>Submit details</button>
-              </form>)}
+              </form>
+              
+              )}
+              
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Form Data</DialogTitle>
+                  <DialogContent>
+                    <p>test</p>
+                </DialogContent>
+                <Button onClick={handleClose}>Close</Button>
+              </Dialog>
           </div>   
     </div>
   )
