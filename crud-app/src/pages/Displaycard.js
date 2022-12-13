@@ -12,7 +12,7 @@ const Displaycard = () => {
  
 // get card details
   const DisplayAllCard = () => {
-    Axios.get("http://localhost:5000/api/allCardDetails").then((response) => {
+    Axios.get(`http://localhost:5000/api/allCardDetails`).then((response) => {
     setUserDetails(response.data);
     console.log(response);})}
 
@@ -21,7 +21,7 @@ const Displaycard = () => {
     
     <div className="bg-gray-200 text-white p-4">
       <h1>test</h1>
-      <Button className='bg-black text-white px-4 py-2 rounded-lg ml-4' onClick={DisplayAllCard}>View Submitted details</Button>
+      <Button className='bg-black text-white px-4 py-2 rounded-lg ml-4' onClick={()=>DisplayAllCard(email)}>View Submitted details</Button>
       <div className="mt-4">
       <h1 className="text-2xl text-black font-bold">Cardinfo</h1>
         {userDetails.length > 0 && userDetails.map((value, key)=>{

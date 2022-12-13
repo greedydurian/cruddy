@@ -3,14 +3,13 @@ import { Button } from "@material-tailwind/react";
 import Axios from "axios";
 import QRCode from "qrcode.react";
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-
+import { v4 as uuidv4 } from 'uuid';
 
 
 const Cardinfo = () => {
   const [userDetails, setUserDetails] = useState([]);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [qrCodeData, setQrCodeData] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
 // for form
@@ -21,10 +20,13 @@ const Cardinfo = () => {
   const [edition, setEdition]= useState([])
 
   const [open, setOpen] =useState(false)
+  const [uuid, setUuid]= useState(uuidv4());
 
-
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
     setOpen(true);
+    
   };
 
   const handleClose = (event) => {
@@ -32,6 +34,7 @@ const Cardinfo = () => {
     event.preventDefault();
   };
 
+ 
 
   const downloadQRCode = () => {
     const qrCodeURL = document.getElementById('qrCodename')
@@ -55,7 +58,11 @@ const Cardinfo = () => {
       console.log('success');
   });
 };
-  
+
+function handleUuid() {
+  const newUuid = uuidv4();
+  setUuid(newUuid);
+}  
  
 // get card details
   const getDetails = () => {
@@ -64,7 +71,8 @@ const Cardinfo = () => {
     console.log(response);})}
   
 
-  const getallCardDetails = async () => {
+  const getallCardDetails = async (event) => {
+      event.preventDefault();
       return Axios.post("http://localhost:5000/api/inputCardDetails" , {
       name:name,
       email:email,
@@ -73,9 +81,13 @@ const Cardinfo = () => {
       year:year,
       type:type,
       edition:edition, 
+      uuid:uuid,
+      
       }).then(() => {
           console.log('success');
+          
           setOpen(true);
+          
       }).catch((error) => {
           // handle the error here
       });
@@ -118,16 +130,10 @@ const Cardinfo = () => {
          <div className="mt-4">
           
             <button className="bg-black text-white px-4 py-2 rounded-lg" onClick={getCard} >Check details</button>
-            <button className="bg-black text-white px-4 py-2 rounded-lg ml-4" onClick={() => setQrCodeData(name)}>Generate QR code</button>
-         
-            {qrCodeData && (
-            <QRCode id='qrCodename' value={qrCodeData} className="mt-4"/>)}
-            <button className="bg-black text-white px-4 py-2 rounded-lg" onClick={downloadQRCode}>Download QR Code</button>
-            
-            
-        
+
               {email && <p className="mt-4 text-black font-semibold">Selected email: {email}</p>}
               {name && <p className="mt-4 text-black font-semibold">Selected name: {name}</p>}
+             
 
 
             {showForm && (
@@ -151,18 +157,30 @@ const Cardinfo = () => {
                   <input type="text" placeholder="Edition" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" onChange={(event) => {setEdition(event.target.value)}}/>
                 </label>
                 </div>
+                
+                <br></br>
+                <p>this is your uuid:{uuid}</p>
+                <div>
+                <button className="bg-black text-white px-4 py-2 rounded-lg ml-4" onClick={handleUuid}>Generate UUID and QR code</button>
+                {uuid && <QRCode id='qrCodename' value={uuid} className="mt-4"/>}
+                </div>
+                <button className="bg-black text-white px-4 py-2 rounded-lg" onClick={downloadQRCode}>Download QR Code</button>
+
                 <button className="bg-black text-white px-4 py-2 rounded-lg ml-4" onClick={getallCardDetails}>Submit details</button>
               </form>
+
               
               )}
+               
               
-              <Dialog open={open} onClose={handleClose}>
+               
+         {/* <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Form Data</DialogTitle>
                   <DialogContent>
                     <p>test</p>
                 </DialogContent>
                 <Button onClick={handleClose}>Close</Button>
-              </Dialog>
+              </Dialog> */}
           </div>   
     </div>
   )
