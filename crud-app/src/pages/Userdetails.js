@@ -17,9 +17,6 @@ const UserDetails =() => {
     
     });
     let uuid = uuidv4();
-   
-
-    
 
     // console.log(uuidv4())
     const submit = async () => {
@@ -32,13 +29,10 @@ const UserDetails =() => {
         }).then(() => {console.log('success')})
     }
 
-   
-       
     return(
       
         <div className="Userdetails bg-gray-200 p-4 flex flex-col items-center" >
               
-         
                     <div className='grid justify-items-center items-center h-screen border-4 border-black rounded-md w-full'>
                     <h1 className="text-2xl font-bold">User details</h1>
                         <p className="text-sm"> Date : {date.toLocaleDateString()}</p>

@@ -1,9 +1,6 @@
-import { Button } from '@material-tailwind/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import UserDetails from './Userdetails';
-import {Cardinfo} from './Cardinfo';
-import {Displaycard} from './Displaycard';
+
 
 const First = () => {
   return (
@@ -18,6 +15,9 @@ const First = () => {
         </Link>
         <Link to='/Displaycard' className='bg-gray-300 rounded'>
           <button className="bg-black text-white px-4 py-2 rounded-lg">Check user</button>
+        </Link>
+        <Link to='/Ebaydata' className='bg-gray-300 rounded'>
+          <button className="bg-black text-white px-4 py-2 rounded-lg">Ebay Details</button>
         </Link>
     </div>
   );

@@ -168,19 +168,16 @@ function handleUuid() {
 
                 <button className="bg-black text-white px-4 py-2 rounded-lg ml-4" onClick={getallCardDetails}>Submit details</button>
               </form>
-
               
               )}
                
-              
-               
-         {/* <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Form Data</DialogTitle>
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>PLEASE NOT YOUR UUID AND DOWNLOAD YOUR QR CODE. IF YOU FORGET IT THEN THATS TOO BAD YOU MAGGOT</DialogTitle>
                   <DialogContent>
-                    <p>test</p>
+                    <p>QR CODE GENERATED</p>
                 </DialogContent>
                 <Button onClick={handleClose}>Close</Button>
-              </Dialog> */}
+              </Dialog>
           </div>   
     </div>
   )

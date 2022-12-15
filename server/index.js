@@ -64,21 +64,59 @@ app.post('/api/inputCardDetails', (req, res) => {
     const year = req.body.year;
     const type = req.body.type;
     const edition = req.body.edition;
-
-    db.query("INSERT INTO card_details_db(email, name, cardName, company, year, type, edition) VALUES ( ? , ?, ? , ?, (STR_TO_DATE(?, '%Y')) , ?,?)", [email, name,cardName, company, year, type, edition], (error, result) => {
+    const uuid = req.body.uuid;
+    db.query("INSERT INTO card_details_db(email, name, cardName, company, year, type, edition, uuid) VALUES ( ? , ?, ? , ?, (STR_TO_DATE(?, '%Y')) , ?,?, ?)", [email, name,cardName, company, year, type, edition, uuid], (error, result) => {
         console.log("error", error);
         console.log("result", result)}
         );
 } );
 
-app.get('/api/allCardDetails', (req, res) => {
-    db.query("SELECT email, name, type FROM card_details_db group by email", (error, result) => {
-        console.log("error", error);
-        console.log("result",result);
-        res.send(result)
-    });
+app.get('/api/inputCardDetails/:uuid', (req, res) => {
+  const uuid = req.params.uuid;
+  // Search for the person with the given UUID in the array of people
+  db.query("SELECT cardName FROM card_details_db WHERE uuid = ?", uuid, (error, result) => {
+    console.log("error", error);
+    console.log("result", result);
+    res.send(result)
+    }
+    );
+} );
+
+
+app.get('/api/allCardDetails/', (req, res) => {
    
-});
+    db.query('SELECT email, name, type FROM card_details_db',
+     (error, result) => {
+      console.log("error", error);
+      console.log("result",result);
+      res.send(result)
+    });
+  });
+
+
+//login
+const users = {
+    alice: {
+      username: 'alice',
+      password: 'password123'
+    }
+  };
+  
+  // Route for logging in
+app.post('/api/login', (req, res) => {
+    // Get the username and password from the request body
+    const { username, password } = req.body;
+  
+    // Check if the username and password are valid
+    const user = users[username];
+    if (user && user.password === password) {
+      // If the username and password are correct, send the user object as a response
+      res.json({ user });
+    } else {
+      // If the username and password are incorrect, return a 401 error
+      res.status(401).send('Incorrect username or password');
+    }
+  });
 
 app.listen(5000, ()=>{
     console.log('server is running on port 5000')
