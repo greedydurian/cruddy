@@ -6,6 +6,7 @@ const Ebaydata = () => {
   const [uuid, setUuid] = useState('');
   const [cardname, setCardName] = useState('');
   const [isChecked, setIsChecked] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,8 +21,21 @@ const Ebaydata = () => {
     axios.get(`http://localhost:5000/api/inputCardDetails/${uuid}`)
       .then(response => {
         setCardName(response.data[0].cardName);
+
+    axios.get(`https://testkso.s3.amazonaws.com/images/${uuid}`)
+      .then(response => {
+        // Set the image URL in the state
+        const imageUrl = response.config.url;
+        setImageUrl(imageUrl);
+        console.log(imageUrl)
+      })
+      .catch(error => {
+        console.error(error);
+      });
       });
   }
+
+
 
   return (
     <div className="bg-gray-200 p-4">
@@ -31,9 +45,15 @@ const Ebaydata = () => {
         <input className="border-2 p-2 rounded-lg" type="text" value={uuid} onChange={e => setUuid(e.target.value)} />
       </label>
       <button className='bg-black text-white px-4 py-2 rounded-lg ml-4' onClick={()=>getName(uuid)}>View Submitted details</button>  
+      <div>
+     
+      
+     
+    </div>
     </form>
       <div className="mt-4"> 
         <p className="mt-4 text-black font-semibold">Selected card name: {cardname}</p>
+        <img src={imageUrl} alt="card" />
       </div>  
       <div>
         <p className="mt-4 text-black font-semibold">I have checked that the details are correct</p>
